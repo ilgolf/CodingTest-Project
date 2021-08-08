@@ -11,7 +11,7 @@ class P {
     }
 }
 
-class Solution {
+class RacingRoad {
     
     private static int[][] map;
     private static int[][] moving = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};

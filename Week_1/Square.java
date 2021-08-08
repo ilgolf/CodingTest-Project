@@ -1,27 +1,21 @@
-class Solution {
+class Square {
     public int solution(int [][]board) {
-        int[][] dp = new int[board.length + 1][board[0].length + 1];
-        
+        int answer = 0;
+
         for(int i=0; i<board.length; i++) {
             for(int j=0; j<board[i].length; j++) {
-                dp[i + 1][j + 1] = board[i][j];
-            }
-        }
-        
-        int max = 0;
-        for(int i=1; i<dp.length; i++) {
-            for(int j=1; j<dp[i].length; j++) {
-                if(dp[i][j] == 1) {
-                    int left = dp[i - 1][j];
-                    int up = dp[i][j - 1];
-                    int cross = dp[i - 1][j - 1];
-                    int min = Math.min(left, Math.min(up, cross));
-                    dp[i][j] = min + 1;
-                    max = Math.max(max, min + 1);
+                if(board[i][j] > 0) {
+                    int up = (j - 1 >= 0) ? board[i][j - 1] : 0;
+                    int left = (i - 1 >= 0) ? board[i - 1][j] : 0;
+                    int cross = (i - 1 >= 0 && j - 1 >= 0) ? board[i - 1][j - 1] : 0;
+
+                    board[i][j] = Math.min(Math.min(up, left), cross) + 1;
+
+                    answer = Math.max(answer, board[i][j]);
                 }
             }
         }
-        
-        return max * max;
+
+        return answer * answer;
     }
 }
