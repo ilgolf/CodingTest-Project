@@ -12,9 +12,9 @@ class DestroyWall3 {
     static class P {
         int x;
         int y; 
-        int count; 
-        int dis;
-        boolean time;
+        int count; // 벽 부순 갯수
+        int dis; // 거리 
+        boolean time;  // true 낮, false : 밤
         
         public P(int x, int y, int count, int dis, boolean time) {
             this.x = x;
@@ -28,30 +28,34 @@ class DestroyWall3 {
 
     private static int bfs(){
 
-        int[][] broken = new int[n + 1][m + 1];
+        int[][] broken = new int[n + 1][m + 1];  // 각 위치에 부순 벽의 수를 저장
+
+
         for(int i=0; i <= n; i++){
             Arrays.fill(broken[i], Integer.MAX_VALUE);
         }
         Queue<P> queue = new LinkedList<>();
         
         queue.offer(new P(0, 0, 0, 1, true));
-        broken[0][0] = 0; 
+        broken[0][0] = 0; // 최초 위치는 벽을 부순적이 없음
         
         while(!queue.isEmpty()){
             P curr = queue.poll();
             
             if(curr.x == n && curr.y == m) {
-                return curr.dis;
+                return curr.dis;  
             }
             
             for(int i=0; i < 4; i++){
                 int nx = curr.x + moving[i][0];
                 int ny = curr.y + moving[i][1];
                 
+                // 이미 부순 벽의 수가 더 많다면 넘어간다.
                 if(nx < 0 || nx >= n + 1 || ny < 0 || ny >= m + 1|| broken[nx][ny] <= curr.count) continue;
                 
-                if(map[nx][ny] == '1'){
+                if(map[nx][ny] == '1') {
 
+                    // 벽 카운트 최대 도달 시
                     if(curr.count >= k) continue;
                     
                     if(curr.time){
