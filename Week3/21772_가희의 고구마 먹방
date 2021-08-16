@@ -1,0 +1,57 @@
+package 신규아이디추천;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static final int[] dx = { 1, -1, 0, 0 };
+	static final int[] dy = { 0, 0, 1, -1 };
+	static boolean[][] check;
+	static char[][] map;
+	static int ans=0;
+	static void go(int x,int y, int selected, int n, int m, int t,int amount) {
+        if (selected == t) { 
+        	ans = Math.max(ans, amount);
+            return;
+        }
+        if (x > n || y>m) return; //더이상 선택할 수가 없을 경우
+        for (int k = 0; k < 4; k++) {
+			int nx = x + dx[k];
+			int ny = y + dy[k];
+			if (nx < 0 || nx >= n || ny < 0 || ny >= m)
+				continue;
+			if(map[nx][ny]=='#')continue;
+			if(map[nx][ny]=='S' && check[nx][ny]==false)
+			{
+				check[nx][ny]=true;
+				go(nx,ny, selected+1, n, m,t,amount+1);
+				check[nx][ny]=false;
+			}
+			if(map[nx][ny]=='.'|| map[nx][ny]=='G'||(map[nx][ny]=='S' && check[nx][ny]==true))
+				go(nx,ny, selected+1, n, m,t,amount);
+
+        }
+    }
+	public static void main(String args[]) throws NumberFormatException, IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer tokenizer = new StringTokenizer(reader.readLine());
+		int R = Integer.parseInt(tokenizer.nextToken());
+		int C = Integer.parseInt(tokenizer.nextToken());
+		int T = Integer.parseInt(tokenizer.nextToken());
+		map = new char[R][C];
+		check = new boolean[R][C];
+		for (int i = 0; i < R; i++)
+			map[i] = reader.readLine().toCharArray();
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < C; j++) {
+				if (map[i][j] == 'G') {
+					go(i, j,0, R, C, T,0);
+					break;
+				}
+			}
+		}
+		System.out.println(ans);
+	}
+}

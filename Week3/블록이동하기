@@ -1,0 +1,119 @@
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Main {
+
+	final static int[][] dx = { { 0, 0 }, { 0, 0 }, { 1, 1 }, { -1, -1 }, { -1, 0 }, { 1, 0 }, { 0, 1 }, { 0, -1 },
+			{ 0, -1 }, { 0, -1 }, { 1, 0 }, { 1, 0 } };
+	final static int[][] dy = { { 1, 1 }, { -1, -1 }, { 0, 0 }, { 0, 0 }, { 1, 0 }, { 1, 0 }, { 0, -1 }, { 0, -1 },
+			{ 0, -1 }, { 0, 1 }, { 1, 0 }, { -1, 0 } };
+
+	static class Pair {
+		int leftX;
+		int leftY;
+		int rightX;
+		int rightY;
+		int dir; // 가로 0 or 세로 1
+		int time;
+
+		Pair(int leftX, int leftY, int rightX, int rightY, int dir, int time) {
+			this.leftX = leftX;
+			this.leftY = leftY;
+			this.rightX = rightX;
+			this.rightY = rightY;
+			this.dir = dir;
+			this.time = time;
+		}
+	}
+	static boolean[][][][] check;
+	public static int solution(int[][] board) {
+		int answer = 0;
+		int N = board.length;
+		check = new boolean[N][N][N][N];
+		Queue<Pair> will = new LinkedList<Pair>();
+		will.add(new Pair(0, 0, 0, 1, 0, 0));
+		check[0][0][0][1] = true;
+		while (!will.isEmpty()) {
+			Pair p = will.poll();
+			if ((p.leftX == N - 1 && p.leftY == N - 1) || (p.rightX == N - 1 && p.rightY == N - 1))
+				return p.time;
+			for (int i = 0; i < 12; i++) {
+				int lx = p.leftX + dx[i][0];
+				int ly = p.leftY + dy[i][0];
+				int rx = p.rightX + dx[i][1];
+				int ry = p.rightY + dy[i][1];
+				if (lx < 0 || ly < 0 || lx >= N || ly >= N || rx < 0 || ry < 0 || rx >= N || ry >= N)
+					continue;
+				if (board[lx][ly] == 1 || board[rx][ry] == 1)
+					continue;
+				if (i == 0 || i == 1 || i == 2 || i == 3) {
+					if (check[lx][ly][rx][ry] == true)
+						continue;
+					will.add(new Pair(lx, ly, rx, ry, p.dir, p.time + 1));
+					check[lx][ly][rx][ry] = true;
+				}
+				if (p.dir == 0) {
+					if (i == 4 && checkRotating(p.leftX, p.leftY, lx, ly, i, board)) {
+						if (check[lx][ly][rx][ry] == true)
+							continue;
+						check[lx][ly][rx][ry] = true;
+						will.add(new Pair(lx, ly, rx, ry, 1, p.time + 1));
+					}
+					if (i == 5 && checkRotating(p.leftX, p.leftY, lx, ly, i, board)) {
+						if (check[rx][ry][lx][ly] == true)
+							continue;
+						will.add(new Pair(rx, ry, lx, ly, 1, p.time + 1));
+						check[rx][ry][lx][ly] = true;
+					}
+					if (i == 6 && checkRotating(p.rightX, p.rightY, rx, ry, i, board)) {
+						if (check[lx][ly][rx][ry] == true)
+							continue;
+						check[lx][ly][rx][ry] = true;
+						will.add(new Pair(lx, ly, rx, ry, 1, p.time + 1));
+					}
+					if (i == 7 && checkRotating(p.rightX, p.rightY, rx, ry, i, board)) {
+						if (check[rx][ry][lx][ly] == true)
+							continue;
+						will.add(new Pair(rx, ry, lx, ly, 1, p.time + 1));
+						check[rx][ry][lx][ly] = true;
+					}
+
+				} else {
+					if (i == 8 && checkRotating(p.rightX, p.rightY, rx, ry, i, board)) {
+						if (check[rx][ry][lx][ly] == true)
+							continue;
+						will.add(new Pair(rx, ry, lx, ly, 0, p.time + 1));
+						check[rx][ry][lx][ly] = true;
+					}
+					if (i == 9 && checkRotating(p.rightX, p.rightY, rx, ry, i, board)) {
+						if (check[lx][ly][rx][ry] == true)
+							continue;
+						will.add(new Pair(lx, ly, rx, ry, 0, p.time + 1));
+						check[lx][ly][rx][ry] = true;
+					}
+					if (i == 10 && checkRotating(p.leftX, p.leftY, lx, ly, i, board)) {
+						if (check[rx][ry][lx][ly] == true)
+							continue;
+						will.add(new Pair(rx, ry, lx, ly, 0, p.time + 1));
+						check[rx][ry][lx][ly] = true;
+					}
+					if (i == 11 && checkRotating(p.leftX, p.leftY, lx, ly, i, board)) {
+						
+						will.add(new Pair(lx, ly, rx, ry, 0, p.time + 1));
+						
+					}
+				}
+			}
+		}
+		return answer;
+	}
+	public static boolean checkRotating(int x, int y, int rotateX, int rotateY, int rotateDir, int[][] board) {
+		if (rotateDir == 4 || rotateDir == 5 || rotateDir == 6 || rotateDir == 7)
+			if (board[rotateX][y] == 1)
+				return false;
+			else if (rotateDir == 8 || rotateDir == 9 || rotateDir == 10 || rotateDir == 11)
+				if (board[x][rotateY] == 1)
+					return false;
+		return true;
+	}
