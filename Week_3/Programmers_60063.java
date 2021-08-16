@@ -6,18 +6,18 @@ class Solution {
         int n = board.length;
         boolean[][][] visited = new boolean[n][n][2];
         Queue<robot> q = new LinkedList<>();
-        q.add(new robot(0,0,0));
-        visited[0][0][0] = true;
-        int t = 0;
+        q.add(new robot(0,0,0)); // 로봇 배치
+        visited[0][0][0] = true; // 방문 체크
+        int t = 0; // 이동 횟수
         while(true){
             if(visited[n-1][n-2][0]||visited[n-2][n-1][1]){
-                return t;
+                return t; // 로봇이 끝지점에 도착 했을 경우 t 리턴
             }
             if(q.isEmpty()) break;
             int sz = q.size();
             for(int i=0;i<sz;i++){
                 robot p = q.poll();
-                if(p.d==0){
+                if(p.d==0){ // 로봇이 가로인 경우
                     if(p.x-1>=0) if(!visited[p.y][p.x-1][0]&&board[p.y][p.x-1]==0){
                         visited[p.y][p.x-1][0] = true;
                         q.add(new robot(p.y,p.x-1,0));
@@ -54,7 +54,7 @@ class Solution {
                             q.add(new robot(p.y+1,p.x,0));
                         }
                     }
-                }else{
+                }else{ // 로봇이 세로인 경우
                     if(p.y-1>=0) if(!visited[p.y-1][p.x][1]&&board[p.y-1][p.x]==0){
                         visited[p.y-1][p.x][1] = true;
                         q.add(new robot(p.y-1,p.x,1));
@@ -106,7 +106,7 @@ class Solution {
 		public robot(int y, int x, int d) {
 			this.y = y;
 			this.x = x;
-			this.d = d;
+			this.d = d; // 방향 0:가로 1:세로
 		}
 	}
 }
