@@ -5,6 +5,7 @@ class Solution {
     
     public static int size;
     public static boolean[][][] visited;
+    public static int[][] move={{0,-1},{-1,0},{1,0},{0,1}};
     
     public int solution(int[][] board) {
         int answer = 0;
@@ -15,7 +16,7 @@ class Solution {
         //[][][0] : 가로, [][][1]: 세로
         visited=new boolean[size][size][2];
             
-        queue.add(new Point(0,0,true));
+        queue.add(new Point(0,0,true,0));
         
         visited[0][0][0]=true;
         
@@ -23,148 +24,117 @@ class Solution {
         
         
         while(!queue.isEmpty()){
-            int queueSize=queue.size();
             
-            for(int i=0;i<queueSize;i++){
-                Point now=queue.poll();
+            Point now=queue.poll();
+            
+            System.out.println(now.x+" "+now.y+" "+now.move+" "+now.direction);
+            
+            if(now.direction && now.x==size-1 && now.y==size-2){
+                answer=now.move;
+                break;
+            }
+            if(!now.direction && now.x==size-2 && now.y==size-1){
+                answer=now.move;
+                break;
+            }
+            
+            for(int i=0;i<4;i++){
+                int next_x=now.x+move[i][0];
+                int next_y=now.y+move[i][1];
                 
-                
-                if(now.x==size-1 && now.y==size-2 && now.direction){
-                    flag=true;
-                    break;
-                }
-                
-                if(now.x==size-2 && now.y==size-1 && !now.direction){
-                    flag=true;
-                    break;
+                if(now.direction){
+                    if(!isValid(next_x,next_y,next_x,next_y+1,now.direction,board))
+                        continue;
+                }else{
+                    if(!isValid(next_x,next_y,next_x+1,next_y,now.direction,board))
+                        continue;
                 }
 
                 
+        
+                queue.add(new Point(next_x,next_y,now.direction,now.move+1));
+                visited[next_x][next_y][now.direction?0:1]=true;
                 
                 if(now.direction){
-                    if(isValid(now.x,now.y+2) && board[now.x][now.y+2]==0 && !visited[now.x][now.y+1][0]){
-                        queue.add(new Point(now.x,now.y+1,true));
-                        visited[now.x][now.y+1][0]=true;
-                    }
                     
-                    if(isValid(now.x,now.y-1) && board[now.x][now.y-1]==0 && !visited[now.x][now.y-1][0]){
-                        queue.add(new Point(now.x,now.y-1,true));
-                        visited[now.x][now.y-1][0]=true;
-                    }
-                    
-                    
-                    if(isValid(now.x-1,now.y) && isValid(now.x-1,now.y+1) && board[now.x-1][now.y]==0 && board[now.x-1][now.y+1]==0){
-                    
-                        if(!visited[now.x-1][now.y+1][1]){
-                            visited[now.x-1][now.y+1][1]=true;
-                            queue.add(new Point(now.x-1,now.y+1,false));
-                        }
+                    if(i==1){
                         
-                        if(!visited[now.x-1][now.y][1]){
-                            visited[now.x-1][now.y][1]=true;
-                            queue.add(new Point(now.x-1,now.y,false));
+                        if(!visited[next_x][next_y][now.direction?1:0]){
+                            queue.add(new Point(next_x,next_y,!now.direction,now.move+1)); 
+                            visited[next_x][next_y][now.direction?1:0]=true;
                         }
-                        
-                    
-                        if(!visited[now.x-1][now.y][0]){
-                            visited[now.x-1][now.y][0]=true;
-                            queue.add(new Point(now.x-1,now.y,true));
+                        if(!visited[next_x][next_y+1][now.direction?1:0]){
+                            queue.add(new Point(next_x,next_y+1,!now.direction,now.move+1));
+                            visited[next_x][next_y+1][now.direction?1:0]=true;
+                        }
+                    }else if(i==2){
+                        if(!visited[now.x][now.y][now.direction?1:0]){
+                            queue.add(new Point(now.x,now.y,!now.direction,now.move+1));
+                            visited[now.x][now.y][now.direction?1:0]=true;
+                        }
+                        if(!visited[now.x][now.y+1][now.direction?1:0]){
+                            queue.add(new Point(now.x,now.y+1,!now.direction,now.move+1));
+                            visited[now.x][now.y+1][now.direction?1:0]=true;
                         }
                     }
                     
-                    if(isValid(now.x+1,now.y) && isValid(now.x+1,now.y+1) && board[now.x+1][now.y]==0 && board[now.x+1][now.y+1]==0){
-                        
-                        if(!visited[now.x][now.y][1]){
-                            visited[now.x][now.y][1]=true;
-                            queue.add(new Point(now.x,now.y,false));
-                        }
-                        
-                        if(!visited[now.x][now.y+1][1]){
-                            visited[now.x][now.y+1][1]=true;
-                            queue.add(new Point(now.x,now.y+1,false));
-                        }
-                        
-                        if(!visited[now.x+1][now.y][0]){
-                            visited[now.x+1][now.y][0]=true;
-                            queue.add(new Point(now.x+1,now.y,true));
-                        }
-                    }
-                       
                 }else{
-                    
-                    if(isValid(now.x+2,now.y) && board[now.x+2][now.y]==0 && !visited[now.x+1][now.y][1]){
-                        queue.add(new Point(now.x+1,now.y,false));
-                        visited[now.x+1][now.y][1]=true;
-                    }
-                    
-                    if(isValid(now.x-1,now.y) && board[now.x-1][now.y]==0 && !visited[now.x-1][now.y][1]){
-                        queue.add(new Point(now.x-1,now.y,false));
-                        visited[now.x-1][now.y][1]=true;
-                    }
-                    
-                    
-                    if(isValid(now.x,now.y+1) && isValid(now.x+1,now.y+1) && board[now.x][now.y+1]==0 && board[now.x+1][now.y+1]==0){
-                    
-                        if(!visited[now.x][now.y][0]){
-                            visited[now.x][now.y][0]=true;
-                            queue.add(new Point(now.x,now.y,true));
+                    if(i==0){
+                        if(!visited[next_x][next_y][now.direction?1:0]){
+                            queue.add(new Point(next_x,next_y,!now.direction,now.move+1)); 
+                            visited[next_x][next_y][now.direction?1:0]=true;
                         }
-                        
-                        if(!visited[now.x+1][now.y][0]){
-                            visited[now.x+1][now.y][0]=true;
-                            queue.add(new Point(now.x+1,now.y,true));
+                        if(!visited[next_x+1][next_y][now.direction?1:0]){
+                            queue.add(new Point(next_x+1,next_y,!now.direction,now.move+1));
+                            visited[next_x+1][next_y][now.direction?1:0]=true;
                         }
-                        
-                        if(!visited[now.x][now.y+1][1]){
-                            visited[now.x][now.y+1][1]=true;
-                            queue.add(new Point(now.x,now.y+1,false));
+                    }else if(i==3){
+                        if(!visited[now.x][now.y][now.direction?1:0]){
+                            queue.add(new Point(now.x,now.y,!now.direction,now.move+1)); 
+                            visited[now.x][now.y][now.direction?1:0]=true;
                         }
-                    }
-                    
-                    if(isValid(now.x,now.y-1) && isValid(now.x+1,now.y-1) && board[now.x][now.y-1]==0 && board[now.x+1][now.y-1]==0){
-                        
-                        if(!visited[now.x+1][now.y-1][0]){
-                            visited[now.x+1][now.y-1][0]=true;
-                            queue.add(new Point(now.x+1,now.y-1,true));
-                        }
-                        
-                        if(!visited[now.x][now.y-1][0]){
-                            visited[now.x][now.y-1][0]=true;
-                            queue.add(new Point(now.x,now.y-1,true));
-                        }
-                        
-                        if(!visited[now.x][now.y-1][1]){
-                            visited[now.x][now.y-1][1]=true;
-                            queue.add(new Point(now.x,now.y-1,false));
+                        if(!visited[now.x+1][now.y][now.direction?1:0]){
+                            queue.add(new Point(now.x+1,now.y,!now.direction,now.move+1));
+                            visited[now.x+1][now.y][now.direction?1:0]=true;
                         }
                     }
                 }
             }
-            
-            if(flag)
-                break;
-            
-            answer++;
         }
         
         
         return answer;
     }
     
-    // 범위안에 있는지 확인
-    public static boolean isValid(int x, int y){
-        return 0<=x && x<size && 0<=y && y<size;
+    // 이동 가능한지 확인
+    public static boolean isValid(int x1, int y1,int x2, int y2, boolean direction,int[][] board){
+        
+        if(x1<0 || x1>=size || y1<0 || y1>=size || x2<0 || x2>=size || y2<0 || y2>=size)
+            return false;
+        
+        if(visited[x1][y1][direction?0:1])
+            return false;
+        
+        if(board[x1][y1]==1)
+            return false;
+        
+        if(board[x2][y2]==1)
+            return false;
+        
+        return true;
     }
     
     // direction true : 가로 , false : 세로
     public static class Point{
         int x, y;
         boolean direction;
+        int move;
         
-        Point(int x, int y,boolean direction){
+        Point(int x, int y,boolean direction,int move){
             this.x=x;
             this.y=y;
             this.direction=direction;
+            this.move=move;
         }
         
     }
