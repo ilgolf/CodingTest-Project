@@ -98,6 +98,7 @@ public class moveBlock {
 
     public int solution(int[][] board) {
         Board = board.clone();
+
         N = board.length;
         
         return bfs();

@@ -11,15 +11,15 @@ public class Trip {
     static void dfs(int count, String prev, String road) {
         
         if(count == t.length) {
-            list.add(road);
+            list.add(road); // 마지막에 저장
             return;
         }
 
         for(int i=0; i<t.length; i++) {
             if(t[i][0].equals(prev) && !checked[i]) {
-                checked[i] = true;
-                dfs(count + 1, t[i][1], road + " " + t[i][1]);
-                checked[i] = false;
+                checked[i] = true; 
+                dfs(count + 1, t[i][1], road + " " + t[i][1]);  // 도착지 계속해서 저장
+                checked[i] = false; 
             }
         }
 
@@ -34,7 +34,7 @@ public class Trip {
 
         dfs(0, "ICN", "ICN");
         
-        Collections.sort(list);
+        Collections.sort(list); // 정렬하여 사전순으로 출력
 
         String[] answer = list.get(0).split(" ");
         
