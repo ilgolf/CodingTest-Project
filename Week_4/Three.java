@@ -14,15 +14,16 @@ public class Three {
             int start = i + 1;
             int end = n - 1;
 
+            // 투 포인터 
             while(start < end) {
-                long sum = solution[i] + solution[start] + solution[end];
+                long sum = solution[i] + solution[start] + solution[end]; 
 
-                if(Math.abs(sum) < min) {
+                if(Math.abs(sum) < min) { // 
                     idx1 = i;
                     idx2 = start;
                     idx3 = end;
 
-                    min = Math.abs(sum);
+                    min = Math.abs(sum); //  
                 }
 
                 if(sum < 0) {

@@ -22,7 +22,7 @@ public class Baek_2021 {
 		boolean[] visitStation = new boolean[N + 1]; //station 방문 체크
 		
 		Queue<Node> q = new LinkedList<>();
-		visitStation[S] = true;
+		visitStation[S] = true; // 출발역 
 		for (int v : edges[S]) {
 			visitRoute[v] = true;
 			q.offer(new Node(v, 0));
@@ -44,7 +44,7 @@ public class Baek_2021 {
 		return -1;
 	}
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked")  // ArrayList<>[] 는 타입 안정성에 문제가 있어 컴파일 에러가 남 그래서 제외시킴
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
@@ -72,3 +72,12 @@ public class Baek_2021 {
 		bw.write(bfs() + "\n");
 	}
 }
+
+/**
+ * 백준 2021 상훈님
+ * 다단계 칫솔 떼껄룩님
+ * 방금그곡 성현님
+ * 표편집 코린잉님
+ * 네트워크 조병규님
+ * 세 용액 GOLF
+ */
