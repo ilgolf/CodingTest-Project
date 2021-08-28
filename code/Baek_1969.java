@@ -1,5 +1,11 @@
 package code;
 
+/**
+ * 
+ * 전형적인 완전 탐색 예상 복잡도 : O(N^2 + @)
+ * 
+ */
+
 import java.io.*;
 import java.util.*;
 

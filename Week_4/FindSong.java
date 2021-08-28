@@ -1,6 +1,6 @@
 package Week_4;
 
-class Solution {
+public class FindSong {
     
     private static String answer = "(None)";
     private static int maxTime = -1;
@@ -61,7 +61,6 @@ class Solution {
             
             findSong(temp, m);
         }
-        
         return answer;
     }
 }
