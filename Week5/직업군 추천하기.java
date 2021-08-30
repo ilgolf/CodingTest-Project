@@ -4,8 +4,8 @@ class Solution {
    
 	public static String solution(String[] table, String[] languages, int[] preference) {
 		HashMap<String, Integer> languageMap = new HashMap<String, Integer>();
-		int[][] langScore = new int[5][9];
 
+		//계산해야되는  언어와 그언어 선호도 저장
 		for (int i = 0; i < languages.length; i++)
 			languageMap.put(languages[i], preference[i]);
 
@@ -15,7 +15,7 @@ class Solution {
 			String[] arr = table[i].split(" ");
 			int score=0;
 			for (int j = 1; j < 6; j++)
-				if(languageMap.containsKey(arr[j]))
+				if(languageMap.containsKey(arr[j]))//계산해야되는 언어일때만
 					score += (6-j) * languageMap.get(arr[j]);
 
 			if(maxScore<score)
