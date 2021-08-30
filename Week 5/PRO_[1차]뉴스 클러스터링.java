@@ -35,23 +35,15 @@ class Solution {
     public int[] makeWord(String str){
         int[] ret=new int[26*26+1];
         
-        int idx=0;
-        boolean zeroFlag=true;
-        
-        for(int x=0;x<str.length();x++){
+        for(int x=0;x<str.length()-1;x++){
             
-            int now=str.charAt(x)-'a';
+            int one=str.charAt(x);
+            int two=str.charAt(x+1);
             
-            if(now<0 || now>=26){
-                zeroFlag=true;
-                idx=0;
-            }else if(zeroFlag){
-                idx=26*now;
-                zeroFlag=false;
-            }else{
-                ret[idx+now]++;
-                idx=now*26;
+            if(Character.isLetter(one) && Character.isLetter(two)){
+                ret[(one-'a')*26+(two-'a')]++;
             }
+        
             
         }
 
