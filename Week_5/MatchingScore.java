@@ -25,21 +25,6 @@ public class MatchingScore {
         }
     }
 
-    class Comp implements Comparator<Page> {
-
-        @Override
-        public int compare(Page o1, Page o2) {
-            if(o1.score == o2.score) {
-                return o1.idx - o2.idx;
-            }
-            else if(o1.score < o2.score) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-    }
-
     public int solution(String word, String[] pages) {
         int wsize = word.length();
 
@@ -68,6 +53,7 @@ public class MatchingScore {
             for(int start = posl; ;) {
                 start = sb.indexOf(word, start + 1);
                 if(start < 0) break;
+
                 // 앞뒤로 알파벳 체크
                 if(!Character.isLetter(sb.charAt(start - 1)) && !Character.isLetter(sb.charAt(start + wsize))) {
                     basic ++; // 주변에 공백이나 기호 숫자로 되어있음 기본 점수 + 1
@@ -101,7 +87,16 @@ public class MatchingScore {
             }
         }
 
-        list.sort(new Comp());
+        Collections.sort(list, (o1, o2) -> {
+                if(o1.score == o2.score) {
+                    return o1.idx - o2.idx;
+                }
+                else if(o1.score < o2.score) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            });
         return list.get(0).idx;
     }
 }
