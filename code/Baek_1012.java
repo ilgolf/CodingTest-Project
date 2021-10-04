@@ -58,14 +58,7 @@ public class Baek_1012 {
             farm = new int[n][m];
             checked = new boolean[n][m];
 
-            for (int i = 0; i < k; i++) {
-                st = new StringTokenizer(br.readLine());
-
-                int a = Integer.parseInt(st.nextToken());
-                int b = Integer.parseInt(st.nextToken());
-
-                farm[a][b] = 1;
-            }
+            Baek_1389.func(br, k, farm);
 
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
