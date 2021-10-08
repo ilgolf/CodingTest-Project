@@ -45,16 +45,16 @@ public class Corona {
 
             P curr = queue.poll();
 
-            for(int i=0; i<moving.length; i++) {
-                int nx = curr.x + moving[i][0];
-                int ny = curr.y + moving[i][1];
+            for (int[] ints : moving) {
+                int nx = curr.x + ints[0];
+                int ny = curr.y + ints[1];
                 int menheton = Math.abs(x - nx) + Math.abs(y - ny);
 
-                if(nx >= 0 && ny >= 0 && nx < 5 && ny < 5) {
-                    if(!checked[nx][ny] && menheton <= 2) {
+                if (nx >= 0 && ny >= 0 && nx < 5 && ny < 5) {
+                    if (!checked[nx][ny] && menheton <= 2) {
                         checked[nx][ny] = true;
-                        if(map[nx][ny] == 'X') continue;
-                        else if(map[nx][ny] == 'P') return false;
+                        if (map[nx][ny] == 'X') continue;
+                        else if (map[nx][ny] == 'P') return false;
                         else {
                             queue.offer(new P(nx, ny));
                         }
