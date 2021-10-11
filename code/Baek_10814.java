@@ -10,17 +10,17 @@ package code;
 import java.io.*;
 import java.util.*;
 
-class P {
-    int age;
-    String name;
-
-    public P(int age, String name) {
-        this.age = age;
-        this.name = name;
-    }
-}
-
 public class Baek_10814 {
+
+    static class P {
+        int age;
+        String name;
+
+        public P(int age, String name) {
+            this.age = age;
+            this.name = name;
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
